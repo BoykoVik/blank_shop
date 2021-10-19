@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.expressions import OrderBy
 from django.db.models.fields import TextField
+from django.urls import reverse
 
 class Category(models.Model):#категории товара
     name = models.CharField(max_length=200, db_index=True)
@@ -13,6 +14,9 @@ class Category(models.Model):#категории товара
     
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('myshop:product_list_by_category', args=[self.slug])
 
 class Product(models.Model):#товары
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -31,3 +35,6 @@ class Product(models.Model):#товары
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('myshop:product_detail', args=[self.id, self.slug])
